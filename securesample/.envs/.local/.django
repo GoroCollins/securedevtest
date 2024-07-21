@@ -1,0 +1,10 @@
+# General
+# ------------------------------------------------------------------------------
+USE_DOCKER=yes
+IPYTHONDIR=/app/.ipython
+
+# HTTPS - take theses host settings to React envs
+# ------------------------------------------------------------------------------
+# VIRTUAL_HOST=securelocal-env.dev
+# VIRTUAL_PORT=8000
+# CORS_ALLOWED_ORIGINS=["http://localhost:9000", "https://frontend.local:9000" ]
