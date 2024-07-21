@@ -10,6 +10,9 @@ import {
 
 export default function Footer() {
   return (
+    <>
+     <p><strong>Email address:</strong><a href="mailto:test@gmail.com">test@gmail.com</a></p>
+     <p><strong>Customer care:</strong><a href="tel:+254713396454">+254713396454</a></p>
     <div className="social-container">
       <h3>Follow Us</h3>
       <a href="https://www.facebook.com/share/C71Rpxx6wMNoAFWP/?mibextid=qi2Omg"
@@ -29,5 +32,6 @@ export default function Footer() {
         <FontAwesomeIcon icon={faTiktok} size="2x" />
       </a>
     </div>
+    /</>
   );
 }
