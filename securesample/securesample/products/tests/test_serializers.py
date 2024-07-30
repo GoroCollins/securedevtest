@@ -18,7 +18,6 @@ def category(user):
 def shoe(user, category):
     return Shoe.objects.create(
         category=category,
-        image='/uploads/images/D89086_EXTRALARGE-682352451.jpg',
         name='Test Shoe',
         description='This is a test shoe.',
         price=50.00,
@@ -43,9 +42,9 @@ def test_category_serializer(user, category):
 def test_shoe_serializer(user, category, shoe):
     client = APIClient()
     serializer = ShoeSerializer(instance=shoe)
+    print("Shoe Serializer Data:", serializer.data)
     expected_data = {
         'category_description': 'women',
-        'image': '/backend/media/uploads/images/D89086_EXTRALARGE-682352451.jpg',
         'name': 'Test Shoe',
         'description': 'This is a test shoe.',
         'price': '50.00',
@@ -53,6 +52,7 @@ def test_shoe_serializer(user, category, shoe):
         'quantity': 10,
         'category': 'wmn',
         'created_by': 'test_user',
-        'modified_by': 'test_user'
+        'modified_by': 'test_user',
+        'images': []
     }
     assert serializer.data == expected_data
