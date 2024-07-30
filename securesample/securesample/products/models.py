@@ -42,5 +42,10 @@ class ShoeImage(models.Model):
     def __str__(self) -> str:
         return f'Images for shoe:{self.shoe}'
     
+    @property
+    def image_url(self):
+        if self.image and hasattr(self.image, 'url'):
+            return self.image.url
+        return ''
     class Meta:
         verbose_name_plural = "Shoe Images"
