@@ -153,12 +153,6 @@ def test_create_shoe_image(api_client, user, shoe):
     
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data['image'] is not None
-# @pytest.mark.django_db
-# def test_retrieve_shoe_image(api_client, shoe_image):
-#     url = reverse('api:shoeimage-detail', args=[shoe_image.id])
-#     response = api_client.get(url)
-#     assert response.status_code == status.HTTP_200_OK
-#     assert response.data['image'] == f'/uploads/{shoe_image.image.name}'
 
 @pytest.mark.django_db
 def test_retrieve_shoe_image(api_client, shoe_image):
