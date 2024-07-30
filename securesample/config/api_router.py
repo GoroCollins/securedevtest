@@ -8,9 +8,9 @@ from securesample.products.api.views import CategoryViewSet, ShoeViewSet, ShoeIm
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
 router.register("users", UserViewSet)
-router.register("Categories", CategoryViewSet)
-router.register("Shoes", ShoeViewSet)
-router.register("ShoeImages", ShoeImageViewSet)
+router.register(r'categories', CategoryViewSet, basename='category')
+router.register(r'shoes', ShoeViewSet, basename='shoe')
+router.register(r'shoeimages', ShoeImageViewSet, basename='shoeimage')
 
 
 app_name = "api"
