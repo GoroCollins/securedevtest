@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
 User = settings.AUTH_USER_MODEL
 # Create your models here.
     
@@ -30,6 +31,14 @@ class Shoe(models.Model):
     
     def __str__(self) -> str:
         return f'{self.name}'
+    
+    def clean(self):
+        if self.price < 0:
+            raise ValidationError({'price': 'Price cannot be negative'})
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
 class ShoeImage(models.Model):
     shoe = models.ForeignKey(Shoe, related_name='images', on_delete=models.PROTECT, related_query_name='images', null=False, blank=False)
