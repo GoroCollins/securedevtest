@@ -1,0 +1,19 @@
+name: backend-testing
+run-name: Running Tests For Backend
+on: 
+  push:
+    branches:
+     - main
+  pull_request:
+    branches:
+    - main
+jobs:
+  components-checking:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v4
+
+      - name: Run Tests
+        run: docker compose -f local.yml run --rm django pytest
+        working-directory: securesample
