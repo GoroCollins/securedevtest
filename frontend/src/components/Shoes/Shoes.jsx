@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import { categoriesURL, shoesURL } from "../Common/Endpoints";
 import { Link } from "react-router-dom";
 import "./Shoes.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, React } from "react";
 import { axiosInstance, useAuthService } from "../Common/Auth.Service";
 
 function Shoes({ count, setCount }) {
