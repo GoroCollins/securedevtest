@@ -7,8 +7,7 @@ interface ShoesProps {
   setCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function HomePage() {
-  const [count, setCount] = useState<number>(8);
+export default function HomePage({ count, setCount }: ShoesProps) {
   return (
     <>
       <h1>Welcome to Mobi hand made sandals</h1>
