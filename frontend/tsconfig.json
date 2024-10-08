@@ -6,6 +6,15 @@
   ],
   "compilerOptions": {
     "types": ["vite/client"],
+    "target": "ES5",
+    "module": "ES6",
+    "jsx": "react-jsx",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true
     // other options...
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
