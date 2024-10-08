@@ -289,7 +289,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         # "rest_framework.authentication.SessionAuthentication",
         # "rest_framework.authentication.TokenAuthentication",
-        "securesample.users.authenticate.CustomJWTAuthentication",
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -309,26 +309,45 @@ SPECTACULAR_SETTINGS = {
 }
 # Your stuff...
 # ------------------------------------------------------------------------------
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
 
 
-CORS_ALLOW_METHODS = ['DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT']
+# CORS_ALLOW_METHODS = ['DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT']
 
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    'content-type',
-]
+# CORS_ALLOW_HEADERS = list(default_headers) + [
+#     'content-type',
+# ]
+
+# SIMPLE_JWT = {
+#     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+#     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+#     'BLACKLIST_AFTER_ROTATION': True,
+
+#     # custom
+#     "AUTH_COOKIE": "access_token",  # cookie name
+#     'REFRESH_COOKIE': 'refresh_token',  # Cookie name for refresh token
+#     "AUTH_COOKIE_DOMAIN": None,  # specifies domain for which the cookie will be sent
+#     "AUTH_COOKIE_SECURE": True,  # restricts the transmission of the cookie to only occur over secure (HTTPS) connections. # Set to True in production
+#     "AUTH_COOKIE_HTTP_ONLY": True,  # prevents client-side js from accessing the cookie
+#     "AUTH_COOKIE_PATH": "/",  # URL path where cookie will be sent
+#     "AUTH_COOKIE_SAMESITE": "None",  # specifies whether the cookie should be sent in cross site requests changed from Lax
+# }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    'BLACKLIST_AFTER_ROTATION': True,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
 
-    # custom
-    "AUTH_COOKIE": "access_token",  # cookie name
-    'REFRESH_COOKIE': 'refresh_token',  # Cookie name for refresh token
-    "AUTH_COOKIE_DOMAIN": None,  # specifies domain for which the cookie will be sent
-    "AUTH_COOKIE_SECURE": True,  # restricts the transmission of the cookie to only occur over secure (HTTPS) connections. # Set to True in production
-    "AUTH_COOKIE_HTTP_ONLY": True,  # prevents client-side js from accessing the cookie
-    "AUTH_COOKIE_PATH": "/",  # URL path where cookie will be sent
-    "AUTH_COOKIE_SAMESITE": "None",  # specifies whether the cookie should be sent in cross site requests changed from Lax
+CSRF_COOKIE_SECURE = False
+
+REST_AUTH = {
+    'SESSION_LOGIN': True,
+    'USE_JWT': True,
+    'JWT_AUTH_COOKIE': 'jwt-auth',
+    'JWT_AUTH_REFRESH_COOKIE': 'refresh-auth',
+    'LOGOUT_ON_PASSWORD_CHANGE': True,
+    'OLD_PASSWORD_FIELD_ENABLED': True,
+    'JWT_AUTH_HTTPONLY': True,
+    'TOKEN_SERIALIZER': 'securesample.users.serializers.CustomTokenSerializer',
+    'USER_DETAILS_SERIALIZER': 'securesample.users.serializers.CustomUserDetailsSerializer',
 }

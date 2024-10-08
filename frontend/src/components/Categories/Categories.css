@@ -1,0 +1,26 @@
+.categories-container {
+    display: flex;
+    justify-content: flex-end; /* Aligns the button to the right */
+    margin-bottom: 20px; /* Adds some space below the button */
+  }
+  
+  .categories-list {
+    list-style-type: decimal; /* Uses an ordered list style */
+    padding: 0; /* Removes default padding */
+  }
+  
+  .categories-list li {
+    margin-bottom: 10px; /* Adds some space between each list item */
+  }
+  .category-detail {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .category-detail p {
+    margin-bottom: 10px;
+  }
+    
