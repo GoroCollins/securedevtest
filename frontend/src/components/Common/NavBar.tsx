@@ -8,6 +8,7 @@ import logo from "../../assets/logo.jpeg";
 import placeholderProfileImage from "../../assets/placeholder.png";
 import { NavDropdown } from 'react-bootstrap';
 
+
 const NavBar: React.FC = () => {
   const { isAuthenticated, user } = useAuthService();
   const profileImage = user?.profile_image || placeholderProfileImage;
