@@ -312,27 +312,6 @@ SPECTACULAR_SETTINGS = {
 CORS_ALLOW_CREDENTIALS = True
 
 
-# CORS_ALLOW_METHODS = ['DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT']
-
-# CORS_ALLOW_HEADERS = list(default_headers) + [
-#     'content-type',
-# ]
-
-# SIMPLE_JWT = {
-#     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-#     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-#     'BLACKLIST_AFTER_ROTATION': True,
-
-#     # custom
-#     "AUTH_COOKIE": "access_token",  # cookie name
-#     'REFRESH_COOKIE': 'refresh_token',  # Cookie name for refresh token
-#     "AUTH_COOKIE_DOMAIN": None,  # specifies domain for which the cookie will be sent
-#     "AUTH_COOKIE_SECURE": True,  # restricts the transmission of the cookie to only occur over secure (HTTPS) connections. # Set to True in production
-#     "AUTH_COOKIE_HTTP_ONLY": True,  # prevents client-side js from accessing the cookie
-#     "AUTH_COOKIE_PATH": "/",  # URL path where cookie will be sent
-#     "AUTH_COOKIE_SAMESITE": "None",  # specifies whether the cookie should be sent in cross site requests changed from Lax
-# }
-
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
