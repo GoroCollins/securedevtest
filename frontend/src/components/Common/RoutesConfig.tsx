@@ -22,8 +22,8 @@ const RoutesConfig: React.FC = () => {
   return (
     <AuthProvider>
       <Routes>
-        <Route index element={<HomePage />} />
-        <Route path="/" element={<HomePage />} />
+      <Route index element={<HomePage count={count} setCount={setCount} />} />
+      <Route path="/" element={<HomePage count={count} setCount={setCount} />} />
         <Route path="/shoes" element={<Shoes count={count} setCount={setCount} />} /> {/* Pass count and setCount */}
         <Route path="/shoe/:id" element={<ShoeDetail />} />
         <Route path="/contact" element={<Contact />} />
