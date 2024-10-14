@@ -131,6 +131,7 @@ const Shoes: React.FC<ShoesProps> = ({ count, setCount }) => {
                     variant="top"
                     src={shoe.images.length > 0 ? shoe.images[0].image : placeholderProfileImage}
                     alt={shoe.name}
+                    className="shoe-image"
                   />
                 </Link>
                 <Card.Body>
