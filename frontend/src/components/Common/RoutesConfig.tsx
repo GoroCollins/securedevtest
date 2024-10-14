@@ -13,14 +13,13 @@ import Contact from "../Contact";
 import Login from "./Login";
 //import Logout from "./Logout";
 import { ProtectedRoute } from "./ProtectedRoutes";
-import { AuthProvider } from "./Auth.Service";
+
 import UserProfile from "./UserProfile";
 
 const RoutesConfig: React.FC = () => {
   const [count, setCount] = useState(0);  // State to manage the count of shoes
 
   return (
-    <AuthProvider>
       <Routes>
       <Route index element={<HomePage count={count} setCount={setCount} />} />
       <Route path="/" element={<HomePage count={count} setCount={setCount} />} />
@@ -37,7 +36,6 @@ const RoutesConfig: React.FC = () => {
         <Route path="/category/:id" element={<ProtectedRoute><CategoryDetails /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
       </Routes>
-    </AuthProvider>
   );
 };
 
