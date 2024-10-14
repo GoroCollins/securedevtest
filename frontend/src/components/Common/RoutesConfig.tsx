@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import HomePage from "../HomePage";
 import Shoes from "../Shoes/Shoes";
@@ -11,31 +11,31 @@ import Categories from "../Categories/Categories";
 import CategoryDetails from "../Categories/CategoryDetails";
 import Contact from "../Contact";
 import Login from "./Login";
-//import Logout from "./Logout";
 import { ProtectedRoute } from "./ProtectedRoutes";
-
 import UserProfile from "./UserProfile";
 
-const RoutesConfig: React.FC = () => {
-  const [count, setCount] = useState(0);  // State to manage the count of shoes
+interface RoutesConfigProps {
+  count: number;
+  setCount: React.Dispatch<React.SetStateAction<number>>;
+}
 
+const RoutesConfig: React.FC<RoutesConfigProps> = ({ count, setCount }) => {
   return (
-      <Routes>
+    <Routes>
       <Route index element={<HomePage count={count} setCount={setCount} />} />
       <Route path="/" element={<HomePage count={count} setCount={setCount} />} />
-        <Route path="/shoes" element={<Shoes count={count} setCount={setCount} />} /> {/* Pass count and setCount */}
-        <Route path="/shoe/:id" element={<ShoeDetail />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
-        {/* <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>} /> */}
-        <Route path="/add-shoe" element={<ProtectedRoute><AddShoe /></ProtectedRoute>} />
-        <Route path="/edit-shoe/:id" element={<ProtectedRoute><EditShoe /></ProtectedRoute>} />
-        <Route path="/add-category" element={<ProtectedRoute><AddCategory /></ProtectedRoute>} />
-        <Route path="/edit-category/:id" element={<ProtectedRoute><EditCategory /></ProtectedRoute>} />
-        <Route path="/categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
-        <Route path="/category/:id" element={<ProtectedRoute><CategoryDetails /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
-      </Routes>
+      <Route path="/shoes" element={<Shoes count={count} setCount={setCount} />} />
+      <Route path="/shoe/:id" element={<ShoeDetail />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/add-shoe" element={<ProtectedRoute><AddShoe /></ProtectedRoute>} />
+      <Route path="/edit-shoe/:id" element={<ProtectedRoute><EditShoe /></ProtectedRoute>} />
+      <Route path="/add-category" element={<ProtectedRoute><AddCategory /></ProtectedRoute>} />
+      <Route path="/edit-category/:id" element={<ProtectedRoute><EditCategory /></ProtectedRoute>} />
+      <Route path="/categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
+      <Route path="/category/:id" element={<ProtectedRoute><CategoryDetails /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+    </Routes>
   );
 };
 
