@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import "./Shoes.css";
 import { useState, useEffect } from "react";
 import { axiosInstance, useAuthService } from "../Common/Auth.Service";
+import placeholderProfileImage from '../../assets/placeholder.png'
 
 interface Category {
   code: string;
@@ -62,7 +63,8 @@ const Shoes: React.FC<ShoesProps> = ({ count, setCount }) => {
         .then((res) => res.data),
     { refreshInterval: 100000 }
   );
-
+  console.log('Shoes data:', shoesData)
+  //console.log('Shoe data:',shoesData?.[0])
   // Re-fetch shoes data when selected category changes
   useEffect(() => {
     mutate();
@@ -114,38 +116,42 @@ const Shoes: React.FC<ShoesProps> = ({ count, setCount }) => {
           </Link>
         )}
       </div>
-      <div className="shoes-container">
-        {shoesData
-          ?.filter((shoe) =>
-            shoe.name.toLowerCase().includes(searchTerm.toLowerCase())
-          )
-          .slice(0, count) // Limit the display to 'count' number of shoes
-          .map((shoe, index) => (
-            <Card border="dark" key={index} style={{ width: "18rem" }}>
-              <Link to={`/shoe/${shoe.id}`}>
-                <Card.Img
-                  variant="top"
-                  src={shoe.images[0]?.image}
-                  alt={shoe.name}
-                />
-              </Link>
-              <Card.Body>
-                <Card.Title>Name: {shoe.name}</Card.Title>
-                <Card.Text>Description: {shoe.description}</Card.Text>
-                <Card.Text>Price: {shoe.price}</Card.Text>
-                <Card.Text>Available quantity: {shoe.quantity}</Card.Text>
-                <Card.Text>
-                  Category:{" "}
-                  {
-                    categoriesData?.find(
-                      (category) => category.code === shoe.category
-                    )?.description
-                  }
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          ))}
-      </div>
+      {/* Render shoe data only when it's available */}
+      {shoesData && shoesData.length > 0 ? (
+        <div className="shoes-container">
+          {shoesData
+            .filter((shoe) =>
+              shoe.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+            .slice(0, count) // Limit the display to 'count' number of shoes
+            .map((shoe, index) => (
+              <Card border="dark" key={index} style={{ width: "18rem" }}>
+                <Link to={`/shoe/${shoe.id}`}>
+                  <Card.Img
+                    variant="top"
+                    src={shoe.images.length > 0 ? shoe.images[0].image : placeholderProfileImage}
+                    alt={shoe.name}
+                  />
+                </Link>
+                <Card.Body>
+                  <Card.Title>Name: {shoe.name}</Card.Title>
+                  <Card.Text>Description: {shoe.description}</Card.Text>
+                  <Card.Text>Price: {shoe.price}</Card.Text>
+                  <Card.Text>Available quantity: {shoe.quantity}</Card.Text>
+                  <Card.Text>
+                    Category: {
+                      categoriesData?.find(
+                        (category) => category.code === shoe.category
+                      )?.description || 'Unknown'
+                    }
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            ))}
+        </div>
+      ) : (
+        <p>Loading shoes...</p>
+      )}
       <div className="btns">
         <button onClick={LoadMore}>Load More</button>
       </div>
