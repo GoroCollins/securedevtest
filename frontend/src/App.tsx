@@ -10,10 +10,9 @@ function App() {
   return (
     <Router>
       <AuthProvider>  {/* Wrap your entire app inside AuthProvider */}
-      <RoutesConfig />
-    </AuthProvider>
+        <RoutesConfig count={count} setCount={setCount} />
+      </AuthProvider>
     </Router>
-    
   );
 }
 
