@@ -137,8 +137,8 @@ const Shoes: React.FC<ShoesProps> = ({ count, setCount }) => {
                 <Card.Body>
                   <Card.Title>Name: {shoe.name}</Card.Title>
                   <Card.Text>Description: {shoe.description}</Card.Text>
-                  <Card.Text>Price: {shoe.price}</Card.Text>
-                  <Card.Text>Available quantity: {shoe.quantity}</Card.Text>
+                  {/* <Card.Text>Price: {shoe.price}</Card.Text> */}
+                  {/* <Card.Text>Available quantity: {shoe.quantity}</Card.Text> */}
                   <Card.Text>
                     Category: {
                       categoriesData?.find(
