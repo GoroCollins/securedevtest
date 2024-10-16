@@ -13,6 +13,7 @@ import Contact from "../Contact";
 import Login from "./Login";
 import { ProtectedRoute } from "./ProtectedRoutes";
 import UserProfile from "./UserProfile";
+import Logout from "./Logout";
 
 interface RoutesConfigProps {
   count: number;
@@ -35,6 +36,7 @@ const RoutesConfig: React.FC<RoutesConfigProps> = ({ count, setCount }) => {
       <Route path="/categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
       <Route path="/category/:id" element={<ProtectedRoute><CategoryDetails /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+      <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>} />
     </Routes>
   );
 };
