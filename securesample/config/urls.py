@@ -41,6 +41,7 @@ urlpatterns += [
         name="api-docs",
     ),
     path('api-auth/', include('rest_framework.urls')),
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
 ]
 
 if settings.DEBUG:
