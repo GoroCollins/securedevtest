@@ -328,6 +328,6 @@ REST_AUTH = {
     'LOGOUT_ON_PASSWORD_CHANGE': True,
     'OLD_PASSWORD_FIELD_ENABLED': True,
     'JWT_AUTH_HTTPONLY': True,
-    'TOKEN_SERIALIZER': 'securesample.users.serializers.CustomTokenSerializer',
-    'USER_DETAILS_SERIALIZER': 'securesample.users.serializers.CustomUserDetailsSerializer',
+    'TOKEN_SERIALIZER': 'securesample.users.api.serializers.CustomTokenSerializer',
+    'USER_DETAILS_SERIALIZER': 'securesample.users.api.serializers.CustomUserDetailsSerializer',
 }
