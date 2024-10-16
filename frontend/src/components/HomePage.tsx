@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Shoes from './Shoes/Shoes';
 import Footer from './Footer';
 
