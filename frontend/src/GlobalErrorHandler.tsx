@@ -8,7 +8,7 @@ interface ErrorPageProps {
 }
 
 const ErrorPage: React.FC<ErrorPageProps> = ({ error, resetErrorBoundary }) => {
-  console.log('Error occurred:', error);
+  console.log('An Error occurred:', error);
 
   return (
     <div className='error-page'>
