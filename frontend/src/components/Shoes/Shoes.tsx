@@ -63,8 +63,6 @@ const Shoes: React.FC<ShoesProps> = ({ count, setCount }) => {
         .then((res) => res.data),
     { refreshInterval: 100000 }
   );
-  console.log('Shoes data:', shoesData)
-  //console.log('Shoe data:',shoesData?.[0])
   // Re-fetch shoes data when selected category changes
   useEffect(() => {
     mutate();
