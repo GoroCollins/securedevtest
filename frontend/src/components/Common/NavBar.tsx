@@ -28,9 +28,9 @@ const NavBar: React.FC = () => {
             {isAuthenticated && (<LinkContainer className="link-primary" to="/categories">
               <Nav.Link>Categories</Nav.Link>
             </LinkContainer>)}  
-            <LinkContainer className="link-primary" to="/login">
+            {!isAuthenticated && (<LinkContainer className="link-primary" to="/login">
               <Nav.Link>Login</Nav.Link>
-            </LinkContainer>
+            </LinkContainer>)}
           </Nav>
           {isAuthenticated && (
             <Nav className="ms-auto">
