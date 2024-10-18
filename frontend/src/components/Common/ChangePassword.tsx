@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 import { changePassword } from './Account.Service'; // Import the password change service
 import { estimatePasswordStrength, getPasswordSuggestions } from './PasswordStrength'; // Import the password utility functions
 
@@ -14,21 +15,27 @@ const ChangePassword: React.FC = () => {
   const [message, setMessage] = useState('');
   const [passwordStrength, setPasswordStrength] = useState('');
   const [passwordSuggestions, setPasswordSuggestions] = useState<string[]>([]);
-
+  
   const newPassword = watch("newPassword");
+  const navigate = useNavigate(); // Initialize the useNavigate hook
 
   const onSubmit: SubmitHandler<IFormInput> = async ({ oldPassword, newPassword }) => {
     try {
       await changePassword(oldPassword, newPassword);
       setMessage("Password changed successfully.");
       reset(); // Clear the form
+      
+      // Redirect to login page after a short delay
+      setTimeout(() => {
+        navigate('/login'); // Redirect to login page
+      }, 2000); // Optional: 2-second delay before redirect
     } catch (error) {
       setMessage("Error: " + error);
     }
   };
 
   // Watch for newPassword changes to dynamically show strength and suggestions
-  React.useEffect(() => {
+  useEffect(() => {
     if (newPassword) {
       const strength = estimatePasswordStrength(newPassword);
       const suggestions = getPasswordSuggestions(newPassword);
