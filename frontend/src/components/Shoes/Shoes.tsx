@@ -63,6 +63,7 @@ const Shoes: React.FC<ShoesProps> = ({ count, setCount }) => {
         .then((res) => res.data),
     { refreshInterval: 100000 }
   );
+
   // Re-fetch shoes data when selected category changes
   useEffect(() => {
     mutate();
@@ -77,6 +78,11 @@ const Shoes: React.FC<ShoesProps> = ({ count, setCount }) => {
   if (categoriesError || shoesError) {
     return <p>Error loading data: {categoriesError?.message || shoesError?.message}</p>;
   }
+
+  // Filter the shoes based on the search term
+  const filteredShoes = shoesData?.filter((shoe) =>
+    shoe.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Function to load more shoes
   const LoadMore = () => {
@@ -114,14 +120,16 @@ const Shoes: React.FC<ShoesProps> = ({ count, setCount }) => {
           </Link>
         )}
       </div>
-      {/* Render shoe data only when it's available */}
-      {shoesData && shoesData.length > 0 ? (
+
+      {/* Check if no shoes are found for the selected category */}
+      {shoesData && filteredShoes?.length === 0 && selectedCategory ? (
+        <p>There are no shoes for this category.</p>
+      ) : filteredShoes?.length === 0 ? (
+        <p>No shoes match your search.</p>
+      ) : (
         <div className="shoes-container">
-          {shoesData
-            .filter((shoe) =>
-              shoe.name.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-            .slice(0, count) // Limit the display to 'count' number of shoes
+          {filteredShoes
+            ?.slice(0, count) // Limit the display to 'count' number of shoes
             .map((shoe, index) => (
               <Card border="dark" key={index} style={{ width: "18rem" }}>
                 <Link to={`/shoe/${shoe.id}`}>
@@ -135,8 +143,6 @@ const Shoes: React.FC<ShoesProps> = ({ count, setCount }) => {
                 <Card.Body>
                   <Card.Title>Name: {shoe.name}</Card.Title>
                   <Card.Text>Description: {shoe.description}</Card.Text>
-                  {/* <Card.Text>Price: {shoe.price}</Card.Text> */}
-                  {/* <Card.Text>Available quantity: {shoe.quantity}</Card.Text> */}
                   <Card.Text>
                     Category: {
                       categoriesData?.find(
@@ -148,9 +154,8 @@ const Shoes: React.FC<ShoesProps> = ({ count, setCount }) => {
               </Card>
             ))}
         </div>
-      ) : (
-        <p>Loading shoes...</p>
       )}
+
       <div className="btns">
         <button onClick={LoadMore}>Load More</button>
       </div>
