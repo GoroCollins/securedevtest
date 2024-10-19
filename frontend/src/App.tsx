@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { AuthProvider } from '../src/components/Common/Auth.Service'; // Make sure to import AuthProvider
 import { BrowserRouter as Router } from 'react-router-dom';
 import RoutesConfig from './components/Common/RoutesConfig';
