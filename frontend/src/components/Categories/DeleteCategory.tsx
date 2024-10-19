@@ -12,10 +12,15 @@ const DeleteCategory: React.FC<DeleteCategoryProps> = ({ categoryId, onDeleteSuc
   const handleDelete = async () => {
     try {
       await axiosInstance.delete(`${categoriesURL}${categoryId}/`);
-      onDeleteSuccess();
+      onDeleteSuccess(); // Call the callback function if delete is successful
     } catch (error: any) {
-      console.error('Error deleting category:', error.response.data.error);
-      alert('Cannot delete category with associated shoes.');
+      if (error.response && error.response.status === 500) {
+        // Handle the specific case of a 500 error (internal server error)
+        alert('Cannot delete category with associated shoes.');
+      } else {
+        console.error('Error deleting category:', error);
+        alert('An error occurred while deleting the category.');
+      }
     }
   };
 
