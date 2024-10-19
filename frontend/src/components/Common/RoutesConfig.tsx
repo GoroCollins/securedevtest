@@ -15,6 +15,7 @@ import { ProtectedRoute } from "./ProtectedRoutes";
 import UserProfile from "./UserProfile";
 import Logout from "./Logout";
 import ChangePassword from "./ChangePassword";
+import ShoeImages from "../Shoes/ShoeImages";
 
 interface RoutesConfigProps {
   count: number;
@@ -39,6 +40,7 @@ const RoutesConfig: React.FC<RoutesConfigProps> = ({ count, setCount }) => {
       <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
       <Route path="/changepassword" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
       <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>} />
+      <Route path="/shoe/:id/images" element={<ProtectedRoute><ShoeImages /></ProtectedRoute>} />
     </Routes>
   );
 };
