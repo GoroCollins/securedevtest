@@ -34,8 +34,7 @@ const DeleteCategory: React.FC<DeleteCategoryProps> = ({ categoryId, onDeleteSuc
       if (error.response && error.response.status === 500) {
         alert('Cannot delete category with associated shoes.');
       } else {
-        console.error('Error deleting category:', error);
-        alert('An error occurred while deleting the category.');
+        alert('Cannot delete category with associated shoes.');
       }
     }
   };
