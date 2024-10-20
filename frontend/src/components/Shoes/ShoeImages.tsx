@@ -44,12 +44,18 @@ const ShoeImages: React.FC = () => {
   // Handle image upload
   const handleAddImage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newImage) return;
+    if (!newImage || !shoeId) return; // Ensure both image and shoeId are present
     setLoading(true);
     const formData = new FormData();
     formData.append("image", newImage);
+    formData.append("shoe", shoeId); // Ensure shoeId is added correctly
+
     try {
-      await axiosInstance.post(`${shoeimagesURL}?shoe=${shoeId}`, formData);
+      await axiosInstance.post(`${shoeimagesURL}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       mutate(); // Re-fetch images after adding new one
       setNewImage(null); // Reset input
     } catch (error) {
@@ -57,6 +63,7 @@ const ShoeImages: React.FC = () => {
     }
     setLoading(false);
   };
+
 
   // Handle image delete
   const handleDeleteImage = async (imageId: string) => {
