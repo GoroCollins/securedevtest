@@ -1,109 +1,73 @@
 import React from 'react';
-import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
-import { axiosInstance } from '../Common/Auth.Service'; // Ensure axiosInstance has auth token setup
+import { axiosInstance } from '../Common/Auth.Service';
+import { Button, Form } from 'react-bootstrap';
 
-interface UserProfileData {
+interface UserProfileForm {
   username: string;
   email: string;
-  first_name: string;
-  last_name: string;
+  name: string;  // Handling name instead of first_name and last_name
 }
 
-// Fetcher function for SWR
-const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
+const fetcher = (url: string) => axiosInstance.get(url).then(res => res.data);
 
 const UserProfile: React.FC = () => {
-  const { data: userData, error, mutate } = useSWR<UserProfileData>('/dj-rest-auth/user/', fetcher);
+  const { data: user, error, mutate } = useSWR('/dj-rest-auth/user/', fetcher);
+  console.log("User Data:", user)
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm<UserProfileForm>();
 
-  // Initialize react-hook-form
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-    setValue,
-  } = useForm<UserProfileData>();
-
-  // Populate the form when the userData is fetched
   React.useEffect(() => {
-    if (userData) {
-      setValue('email', userData.email);
-      setValue('first_name', userData.first_name);
-      setValue('last_name', userData.last_name);
+    if (user) {
+      setValue('username', user.username);
+      setValue('email', user.email);
+      setValue('name', user.name);  // Populate the form with name
     }
-  }, [userData, setValue]);
-  
-  // Handle form submission to update user profile
-  const onSubmit = async (formData: UserProfileData) => {
+  }, [user, setValue]);
+
+  const onSubmit = async (data: UserProfileForm) => {
     try {
-      await axiosInstance.patch('/dj-rest-auth/user/', {
-        email: formData.email,
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-      });
-      mutate(); // Refresh the data after a successful update
-      alert('Profile updated successfully');
-    } catch (err) {
-      console.error('Error updating profile:', err);
-      alert('Failed to update profile.');
+      await axiosInstance.patch('/dj-rest-auth/user/', data);
+      mutate();  // Refresh the data after updating
+    } catch (error) {
+      console.error("Error updating user profile:", error);
     }
   };
 
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
-
-  if (!userData) {
-    return <p>Loading user data...</p>;
-  }
+  if (error) return <p>Error loading user profile</p>;
+  if (!user) return <p>Loading...</p>;
 
   return (
-    <>
-      <h1>User Details</h1>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        {/* Username (read-only) */}
-        <Form.Group controlId="formUsername" className="mb-3">
-          <Form.Label>Username</Form.Label>
-          <Form.Control type="text" value={userData.username} readOnly />
-        </Form.Group>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form.Group controlId="username">
+        <Form.Label>Username</Form.Label>
+        <Form.Control
+          type="text"
+          readOnly
+          {...register('username')}
+        />
+      </Form.Group>
 
-        {/* First Name (editable) */}
-        <Form.Group controlId="formFirstName" className="mb-3">
-          <Form.Label>First Name</Form.Label>
-          <Form.Control
-            type="text"
-            {...register('first_name', { required: true })}
-            placeholder="Enter first name"
-          />
-        </Form.Group>
+      <Form.Group controlId="email">
+        <Form.Label>Email</Form.Label>
+        <Form.Control
+          type="email"
+          {...register('email', { required: true })}
+        />
+        {errors.email && <p>Email is required</p>}
+      </Form.Group>
 
-        {/* Last Name (editable) */}
-        <Form.Group controlId="formLastName" className="mb-3">
-          <Form.Label>Last Name</Form.Label>
-          <Form.Control
-            type="text"
-            {...register('last_name', { required: true })}
-            placeholder="Enter last name"
-          />
-        </Form.Group>
+      <Form.Group controlId="name">
+        <Form.Label>Name</Form.Label>
+        <Form.Control
+          type="text"
+          {...register('name', { required: true })}
+        />
+        {errors.name && <p>Name is required</p>}
+      </Form.Group>
 
-        {/* Email (editable) */}
-        <Form.Group controlId="formEmail" className="mb-3">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            {...register('email', { required: true })}
-            placeholder="Enter email"
-          />
-        </Form.Group>
-
-        {/* Submit Button */}
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Updating...' : 'Update Profile'}
-        </Button>
-      </Form>
-    </>
+      <Button type="submit">Update Profile</Button>
+    </Form>
   );
 };
 

@@ -15,10 +15,11 @@ class UserSerializer(serializers.ModelSerializer[User]):
         }
 class CustomUserDetailsSerializer(UserDetailsSerializer):
     profile_image = serializers.ImageField(read_only=True)
+    name = serializers.CharField()
 
     class Meta:
         model = UserDetailsSerializer.Meta.model
-        fields = UserDetailsSerializer.Meta.fields + ('profile_image',)
+        fields = UserDetailsSerializer.Meta.fields + ('profile_image','name',)
 
 class CustomTokenSerializer(TokenSerializer):
     user = CustomUserDetailsSerializer(read_only=True)  # Use your custom user serializer
