@@ -201,16 +201,6 @@ const EditShoe: React.FC = () => {
           />
           {errors.newImages && <p className="errorMsg">{errors.newImages.message}</p>}
         </Form.Group>
-        {/* {images.length > 0 && (
-          <div className="existing-images">
-            <h5>Existing Images</h5>
-            <div className="image-grid">
-              {images.map((image) => (
-                <img key={image.id} src={image.url} alt={`Shoe ${id}`} className="img-thumbnail" />
-              ))}
-            </div>
-          </div>
-        )} */}
         <Button type="submit" variant="primary">
           Update Shoe
         </Button>
