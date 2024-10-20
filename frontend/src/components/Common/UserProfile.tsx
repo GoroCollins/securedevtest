@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
-import { Link } from 'react-router-dom';
 import { axiosInstance } from '../Common/Auth.Service'; // Ensure axiosInstance has auth token setup
 
 interface UserProfileData {
@@ -104,16 +103,6 @@ const UserProfile: React.FC = () => {
           {isSubmitting ? 'Updating...' : 'Update Profile'}
         </Button>
       </Form>
-
-      {/* Links to change password and logout */}
-      {/* <div style={{ marginTop: '20px' }}>
-        <Link to="/changepassword">
-          <Button variant="warning">Change Password</Button>
-        </Link>
-        <Link to="/logout" style={{ marginLeft: '10px' }}>
-          <Button variant="danger">Logout</Button>
-        </Link>
-      </div> */}
     </>
   );
 };
