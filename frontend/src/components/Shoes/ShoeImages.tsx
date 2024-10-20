@@ -5,6 +5,7 @@ import useSWR from "swr";
 import placeholderImage from "../../assets/placeholder.png";
 import "./ShoeImages.css";
 import { shoeimagesURL, shoesURL } from "../Common/Endpoints";
+import { useParams } from "react-router-dom";  // Import useParams
 
 interface ShoeImage {
   id: string;
@@ -12,14 +13,11 @@ interface ShoeImage {
   image_url: string;
 }
 
-interface ShoeImageProps {
-  shoeId: string;
-}
-
 // Fetcher function for SWR
 const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
 
-const ShoeImages: React.FC<ShoeImageProps> = ({ shoeId }) => {
+const ShoeImages: React.FC = () => {
+  const { id: shoeId } = useParams<{ id: string }>();  // Extract shoeId from URL
   const [newImage, setNewImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [shoename, setShoename] = useState<string>("");
