@@ -35,7 +35,11 @@ class ShoeImageViewSet(viewsets.ModelViewSet):
     queryset = ShoeImage.objects.all()
     serializer_class = ShoeImageSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend]  # Add filtering backend
+    filterset_fields = ['shoe']  # Specify the field for filtering
+
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+
     def perform_update(self, serializer):
         serializer.save(modified_by=self.request.user)

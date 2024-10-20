@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import { axiosInstance } from "../Common/Auth.Service";
 import useSWR from "swr";
 import placeholderImage from "../../assets/placeholder.png";
 import "./ShoeImages.css";
-import { shoeimagesURL } from "../Common/Endpoints";  // Correct shoe images URL
-import { useParams } from "react-router-dom";  // Import useParams
+import { shoeimagesURL, shoesURL } from "../Common/Endpoints";
 
 interface ShoeImage {
   id: string;
@@ -13,18 +12,34 @@ interface ShoeImage {
   image_url: string;
 }
 
-// Fetcher function for SWR using the correct URL
-const fetcher = (url: string) =>
-  axiosInstance.get(url).then((res) => res.data);
+interface ShoeImageProps {
+  shoeId: string;
+}
 
-const ShoeImages: React.FC = () => {
-  const { id: shoeId } = useParams<{ id: string }>(); // Get shoeId from route params
+// Fetcher function for SWR
+const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
+
+const ShoeImages: React.FC<ShoeImageProps> = ({ shoeId }) => {
   const [newImage, setNewImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [shoename, setShoename] = useState<string>("");
+
+  // Fetch the shoe name based on shoeId
+  useEffect(() => {
+    const fetchShoeDetails = async () => {
+      try {
+        const response = await axiosInstance.get(`${shoesURL}${shoeId}/`);
+        setShoename(response.data.name); // Assuming the name is in response.data.name
+      } catch (error) {
+        console.error("Error fetching shoe details:", error);
+      }
+    };
+    fetchShoeDetails();
+  }, [shoeId]);
 
   // Use SWR to fetch the images for the shoe
   const { data: images, error, mutate } = useSWR<ShoeImage[]>(
-    `${shoeimagesURL}${shoeId}/`,  // Correct endpoint for shoe images
+    `${shoeimagesURL}?shoe=${shoeId}`,
     fetcher
   );
 
@@ -36,7 +51,7 @@ const ShoeImages: React.FC = () => {
     const formData = new FormData();
     formData.append("image", newImage);
     try {
-      await axiosInstance.post(`${shoeimagesURL}${shoeId}/`, formData);
+      await axiosInstance.post(`${shoeimagesURL}?shoe=${shoeId}`, formData);
       mutate(); // Re-fetch images after adding new one
       setNewImage(null); // Reset input
     } catch (error) {
@@ -49,7 +64,7 @@ const ShoeImages: React.FC = () => {
   const handleDeleteImage = async (imageId: string) => {
     if (!window.confirm("Are you sure you want to delete this image?")) return;
     try {
-      await axiosInstance.delete(`${shoeimagesURL}${shoeId}/${imageId}/`);
+      await axiosInstance.delete(`${shoeimagesURL}${imageId}/`);
       mutate(); // Re-fetch images after deleting one
     } catch (error) {
       console.error("Error deleting image:", error);
@@ -68,15 +83,15 @@ const ShoeImages: React.FC = () => {
 
   return (
     <div className="shoe-images-container">
-      <h3>Manage Images for Shoe</h3>
+      <h3>Manage Images for {shoename}</h3> {/* Display shoename */}
       <div className="images-list">
         {images.length > 0 ? (
           images.map((image) => (
             <Card key={image.id} style={{ width: "18rem" }}>
               <Card.Img
                 variant="top"
-                src={image.image_url || placeholderImage}
-                alt={`Image for shoe ${shoeId}`}
+                src={image.image || placeholderImage}
+                alt={`Image for shoe ${shoename}`}
                 className="shoe-image"
               />
               <Card.Body>
