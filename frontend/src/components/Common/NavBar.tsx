@@ -6,7 +6,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { useAuthService } from '../Common/Auth.Service';
 import logo from "../../assets/logo.jpeg";
 import placeholderProfileImage from "../../assets/placeholder.png";
-import { NavDropdown } from 'react-bootstrap';
+import { Button, NavDropdown } from 'react-bootstrap';
 
 const NavBar: React.FC = () => {
   const { isAuthenticated, user } = useAuthService();
@@ -61,8 +61,11 @@ const NavBar: React.FC = () => {
                 <LinkContainer className="link-primary" to="/changepassword" onClick={closeDropdown}>
                   <NavDropdown.Item>Change Password</NavDropdown.Item>
                 </LinkContainer>
+                <LinkContainer className="link-primary" to="/profile" onClick={closeDropdown}>
+                  <NavDropdown.Item>Manage Profile</NavDropdown.Item>
+                </LinkContainer>
                 <LinkContainer className="link-primary" to="/logout" onClick={closeDropdown}>
-                  <NavDropdown.Item>Logout</NavDropdown.Item>
+                  <NavDropdown.Item><Button variant="danger">Logout</Button></NavDropdown.Item>
                 </LinkContainer>
               </NavDropdown>
             </Nav>
