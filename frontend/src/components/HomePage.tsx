@@ -1,27 +1,42 @@
-import React from 'react';
-import useSWR from 'swr';
-import { axiosInstance } from './Common/Auth.Service';
+import React, { useEffect, useState } from 'react';
 import Shoes from './Shoes/Shoes';
 import Footer from './Footer';
+import { axiosInstance } from './Common/Auth.Service';
 
 interface ShoesProps {
   count: number;
   setCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-// Fetcher function for SWR
-const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
-
 export default function HomePage({ count, setCount }: ShoesProps) {
-  // Fetch current user information
-  const { data: user, error } = useSWR('/dj-rest-auth/user/', fetcher);
+  const [user, setUser] = useState<{ name?: string; username?: string } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (error) return <p>Error loading user information</p>;
+  // Fetch user data using useEffect
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axiosInstance.get('/dj-rest-auth/user/');
+        setUser(response.data);
+        setError(null); // Reset error on success
+      } catch (err) {
+        setError('Error loading user information');
+        setUser(null);
+      } finally {
+        setLoading(false); // Set loading to false after fetching completes
+      }
+    };
+
+    fetchUserData();
+  }, []); // Empty dependency array ensures this runs once on component mount
 
   return (
     <>
-      {/* Check if the user data exists (authenticated) and show personalized welcome */}
-      {user ? (
+      {/* Check loading state */}
+      {loading ? (
+        <h1>Loading user information...</h1>
+      ) : user ? (
         <h1>Welcome {user.name || user.username} to Mobi hand made sandals</h1>
       ) : (
         <h1>Welcome to Mobi hand made sandals</h1>
