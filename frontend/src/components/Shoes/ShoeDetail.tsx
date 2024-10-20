@@ -49,6 +49,11 @@ const ShoeDetail: React.FC = () => {
         <p>Availability quantity: {shoe.quantity}</p>
         <ShoeImageGallery images={shoe.images} /> {/* Use the gallery component */}
         {isAuthenticated && (
+          <Link to={`/shoe/${shoe.id}/images`}>
+          <Button>Manage Images</Button>
+        </Link>
+        )}
+        {isAuthenticated && (
           <Link to={`/edit-shoe/${shoe.id}/`}>
             <Button>Edit</Button>
           </Link>
