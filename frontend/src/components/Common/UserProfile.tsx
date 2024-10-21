@@ -1,36 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
 import { axiosInstance } from '../Common/Auth.Service';
 import { Button, Form } from 'react-bootstrap';
+import placeholderProfileImage from "../../assets/placeholder.png";
 
 interface UserProfileForm {
   username: string;
   email: string;
-  name: string;  // Handling name instead of first_name and last_name
+  name: string;
+  profile_image: FileList; // Handling profile image upload
 }
 
 const fetcher = (url: string) => axiosInstance.get(url).then(res => res.data);
 
 const UserProfile: React.FC = () => {
   const { data: user, error, mutate } = useSWR('/dj-rest-auth/user/', fetcher);
-  console.log("User Data:", user)
   const { register, handleSubmit, formState: { errors }, setValue } = useForm<UserProfileForm>();
+  const [previewImage, setPreviewImage] = useState<string | null>(null); // To handle image preview
 
   React.useEffect(() => {
     if (user) {
       setValue('username', user.username);
       setValue('email', user.email);
-      setValue('name', user.name);  // Populate the form with name
+      setValue('name', user.name);
+      setPreviewImage(user.profile_image || null);  // Set preview image if available
     }
   }, [user, setValue]);
 
   const onSubmit = async (data: UserProfileForm) => {
+    const formData = new FormData();
+    formData.append('username', data.username);
+    formData.append('email', data.email);
+    formData.append('name', data.name);
+    
+    if (data.profile_image && data.profile_image[0]) {
+      formData.append('profile_image', data.profile_image[0]); // Append the new image if uploaded
+    }
+
     try {
-      await axiosInstance.patch('/dj-rest-auth/user/', data);
-      mutate();  // Refresh the data after updating
+      await axiosInstance.patch('/dj-rest-auth/user/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      mutate();  // Refresh data after updating
     } catch (error) {
       console.error("Error updating user profile:", error);
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));  // Update preview image
     }
   };
 
@@ -38,7 +61,9 @@ const UserProfile: React.FC = () => {
   if (!user) return <p>Loading...</p>;
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <>
+    <h1>Manage your profile</h1>
+    <Form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
       <Form.Group controlId="username">
         <Form.Label>Username</Form.Label>
         <Form.Control
@@ -66,8 +91,38 @@ const UserProfile: React.FC = () => {
         {errors.name && <p>Name is required</p>}
       </Form.Group>
 
+      {/* Display current profile image or a placeholder */}
+      <div>
+        <Form.Label>Profile Image</Form.Label>
+        {previewImage ? (
+          <div>
+            <img src={previewImage} alt="Profile" style={{ width: '150px', height: '150px', objectFit: 'cover' }} />
+          </div>
+        ) : (
+          <div>
+            <p>No profile image available</p> {/* Message when there's no image */}
+            <img 
+              src={placeholderProfileImage} // Use a placeholder image here
+              alt="Placeholder" 
+              style={{ width: '150px', height: '150px', objectFit: 'cover' }} 
+            />
+          </div>
+        )}
+      </div>
+
+      <Form.Group controlId="profile_image">
+        <Form.Label>Change Profile Image</Form.Label>
+        <Form.Control
+          type="file"
+          accept="image/*"
+          {...register('profile_image')}
+          onChange={handleImageChange}  // Update the image preview when a new file is selected
+        />
+      </Form.Group>
+
       <Button type="submit">Update Profile</Button>
     </Form>
+    </>
   );
 };
 
