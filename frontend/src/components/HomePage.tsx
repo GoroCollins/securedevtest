@@ -11,7 +11,6 @@ interface ShoesProps {
 export default function HomePage({ count, setCount }: ShoesProps) {
   const [user, setUser] = useState<{ name?: string; username?: string } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   // Fetch user data using useEffect
   useEffect(() => {
@@ -19,9 +18,7 @@ export default function HomePage({ count, setCount }: ShoesProps) {
       try {
         const response = await axiosInstance.get('/dj-rest-auth/user/');
         setUser(response.data);
-        setError(null); // Reset error on success
       } catch (err) {
-        setError('Error loading user information');
         setUser(null);
       } finally {
         setLoading(false); // Set loading to false after fetching completes
