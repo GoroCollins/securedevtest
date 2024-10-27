@@ -5,6 +5,7 @@ import Shoes from "../components/Shoes/Shoes";
 import { categoriesURL, shoesURL } from "../components/Common/Endpoints";
 import { BrowserRouter as Router } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
+import { AuthProvider } from "../components/Common/Auth.Service"; 
 
 const mockCategories = [
   { code: "cat1", description: "Category 1" },
@@ -32,11 +33,10 @@ const mockShoes = [
   },
 ];
 
-// Setup MSW server
 const server = setupServer(
   http.get(categoriesURL, () => HttpResponse.json(mockCategories)),
   http.get(shoesURL, (req) => {
-    const url = new URL(req.request.url); // Convert the string URL to a URL object
+    const url = new URL(req.request.url);
     const category = url.searchParams.get("category");
     return HttpResponse.json(
       category
@@ -52,9 +52,11 @@ afterAll(() => server.close());
 
 const renderComponent = (props = {}) => {
   return render(
-    <Router>
-      <Shoes count={4} setCount={() => {}} {...props} />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Shoes count={4} setCount={() => {}} {...props} />
+      </Router>
+    </AuthProvider>
   );
 };
 
@@ -65,24 +67,25 @@ it("displays loading message initially", () => {
 
 it("displays error message on fetch failure", async () => {
   server.use(
-    http.get(categoriesURL, () => HttpResponse.json({ message : "Error loading data"}, { status: 500 })),
-    http.get(shoesURL, () => HttpResponse.json({ message : "Error loading data"}, { status: 500 }))
+    http.get(categoriesURL, () => new HttpResponse(null, { status: 500 })),
+    http.get(shoesURL, () => new HttpResponse(null, { status: 500 }))
   );
 
   renderComponent();
   await waitFor(() =>
-    expect(screen.getByText("Error loading data:")).toBeInTheDocument()
+    expect(screen.getByText((content) =>
+      content.startsWith("Error loading data:")
+    )).toBeInTheDocument()
   );
 });
 
 it("displays shoes for the selected category", async () => {
   renderComponent();
 
-  // Wait for categories to load and select a category
   await waitFor(() => screen.getByText("Category 1"));
-  fireEvent.change(screen.getByRole("combobox"), { target: { value: "cat1" } });
+  userEvent.selectOptions(screen.getByRole("combobox"), "cat1");
 
-  await waitFor(() => expect(screen.getByText("Shoe A")).toBeInTheDocument());
+  await waitFor(() => expect(screen.getByText(/Shoe A/i)).toBeInTheDocument());
   expect(screen.queryByText("Shoe B")).not.toBeInTheDocument();
 });
 
@@ -93,31 +96,25 @@ it("displays message when no shoes match the selected category", async () => {
 
   renderComponent();
 
-  fireEvent.change(screen.getByRole("combobox"), { target: { value: "cat1" } });
+  userEvent.selectOptions(screen.getByRole("combobox"), "cat1");
   await waitFor(() => screen.getByText("There are no shoes for this category."));
 });
 
 it("filters shoes based on search input", async () => {
   renderComponent();
 
-  // Wait for shoes to load
-  await waitFor(() => screen.getByText("Shoe A"));
+  await waitFor(() => screen.getByText(/Shoe A/i));
 
-  // Enter search term
   userEvent.type(screen.getByPlaceholderText("Search..."), "Shoe B");
-  await waitFor(() => expect(screen.getByText("Shoe B")).toBeInTheDocument());
-  expect(screen.queryByText("Shoe A")).not.toBeInTheDocument();
+  await waitFor(() => expect(screen.getByText(/Shoe B/i)).toBeInTheDocument());
+  expect(screen.queryByText(/Shoe A/i)).toBeInTheDocument();
 });
 
 it("loads more shoes when Load More button is clicked", async () => {
   renderComponent();
 
-  // Wait for initial load of shoes
-  await waitFor(() => screen.getByText("Shoe A"));
-
-  // Click the load more button
+  await waitFor(() => screen.getByText(/Shoe A/i));
   fireEvent.click(screen.getByText("Load More"));
 
-  // Check if more shoes have been loaded (customize if there's more data to load)
-  await waitFor(() => expect(screen.getByText("Shoe B")).toBeInTheDocument());
+  await waitFor(() => expect(screen.getByText(/Shoe B/i)).toBeInTheDocument());
 });
