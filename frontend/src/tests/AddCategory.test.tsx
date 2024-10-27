@@ -64,9 +64,6 @@ test('shows error message when code is empty and form is submitted', async () =>
   
     render(<AddCategory />);
   
-    // Log before filling the form
-    console.log("Filling form with valid data");
-  
     // Fill in the form
     fireEvent.change(screen.getByLabelText('Code'), { target: { value: 'CAT001' } });
     fireEvent.change(screen.getByLabelText('Description'), { target: { value: 'Category 1 description' } });
