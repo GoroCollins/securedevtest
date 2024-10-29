@@ -15,6 +15,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Tests
-        run: docker compose -f local.yml run --rm frontend npm run test
+        run: docker compose -f local.yml run --rm frontend npm run test:coverage
         working-directory: securesample
 
