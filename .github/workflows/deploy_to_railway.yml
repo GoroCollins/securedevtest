@@ -19,7 +19,7 @@ jobs:
           echo "$HOME/.railway/bin" >> $GITHUB_PATH
     
       - name: Log in to Railway
-        run: railway link -p ${{ secrets.RAILWAY_API_TOKEN }}
+        run: railway link -p d58fd17f-cb8f-4d9e-a236-28c378aaae50  #${{ secrets.RAILWAY_API_TOKEN }}
 
       - name: Deploy to Railway
         run: railway up --detach
