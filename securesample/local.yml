@@ -59,7 +59,7 @@ services:
     stdin_open: true
     build:
       context: ../frontend
-      dockerfile: ../frontend/Dockerfile
+      dockerfile: ../frontend/Dockerfile.dev
     image: securesample_local_react
     container_name: securesample_local_react
     ports:
